@@ -24,24 +24,26 @@ void AMovingPlatform::BeginPlay()
 void AMovingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	MovePlatform(DeltaTime);
-	UpdateDirection(DeltaTime);
+	FVector currentLocation = GetActorLocation();
+
+	MovePlatform(currentLocation, DeltaTime);
+	UpdateDirection(currentLocation, DeltaTime);
 	
 }
 
-void AMovingPlatform::UpdateDirection(float deltaTime)
+void AMovingPlatform::UpdateDirection(FVector currentLocation, float deltaTime)
 {
-	float dist = FVector::Dist(startLocation, GetActorLocation());
-	distance = dist;
-	if (dist > maxDistance) {
+	distance = FVector::Dist(startLocation, currentLocation);
+	if (distance > maxDistance) {
+		FVector movementDirection = (platformVelocity * direction).GetSafeNormal();
+		startLocation += (movementDirection * distance);
+		SetActorLocation(startLocation);
 		direction *= -1;
 	}
 }
 
-void AMovingPlatform::MovePlatform(float deltaTime)
+void AMovingPlatform::MovePlatform(FVector currentLocation, float deltaTime)
 {
-	FVector currentLocation = GetActorLocation();
-
 	currentLocation += (platformVelocity * deltaTime * direction);
 	
 	SetActorLocation(currentLocation);

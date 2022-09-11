@@ -35,7 +35,7 @@ private:
 	float distanceTraveled;
 	FVector startLocation;
 
-	void MovePlatform(float deltaTime);
-	void UpdateDirection(float deltaTime);
+	void MovePlatform(FVector currentLocation, float deltaTime);
+	void UpdateDirection(FVector currentLocation, float deltaTime);
 
 };
